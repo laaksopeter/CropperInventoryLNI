@@ -1,25 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Shop Floor Inventory</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cropper Inventory LSI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="auth-container">
-        <button id="login-btn">Login with Google</button>
-    </div>
+    <div class="container">
+        <div id="auth-container" class="card">
+            <div class="header">
+                <h1>Cropper Inventory</h1>
+                <p>Manufacturing Resource Tracking</p>
+            </div>
+            <button id="login-btn" class="btn-primary">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                Sign in with Google
+            </button>
+        </div>
 
-    <div id="inventory-ui" style="display:none;">
-        <h2 id="user-greeting"></h2>
-        <form id="material-form">
-            <input type="text" id="mat-name" placeholder="Material/Part Name" required>
-            <input type="number" id="mat-qty" placeholder="Quantity Change (+ or -)" required>
-            <button type="submit">Update Sheet</button>
-        </form>
-        <hr>
-        <h3>Recent Activity</h3>
-        <div id="log">Loading sheet data...</div>
+        <div id="inventory-ui" class="card" style="display:none;">
+            <div class="header">
+                <h2 id="user-greeting">Welcome</h2>
+                <span class="status-badge">System Online</span>
+            </div>
+            
+            <form id="material-form">
+                <div class="input-group">
+                    <label for="mat-name">Material / Part Name</label>
+                    <input type="text" id="mat-name" placeholder="e.g. 1/4 inch Steel Plate" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="mat-qty">Quantity Adjustment</label>
+                    <input type="number" id="mat-qty" placeholder="e.g. -5 or 10" required>
+                </div>
+
+                <button type="submit" class="btn-submit">Update Log</button>
+            </form>
+            
+            <div class="footer-note">
+                Updates are synced directly to the master Google Sheet.
+            </div>
+        </div>
     </div>
 
     <script type="module" src="app.js"></script>

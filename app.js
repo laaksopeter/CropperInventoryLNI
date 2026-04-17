@@ -13,7 +13,7 @@ const firebaseConfig = {
   measurementId: "G-PJB6W71DX7"
 };
 
-const SCRIPT_URL = "https://script.google.com/u/0/home/projects/1aB5UagsObeojw4SfoFuKTYfNTG5ilbcehrXs8TbNUTaUMJCkcdzzBxio/edit?pli=1";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCN5wNS4lslN4CgL1FUy22_0SJB7yQsGAh12DzhJydYFC2kC9pA6cEgSFXn8SmoZdm/exec";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
