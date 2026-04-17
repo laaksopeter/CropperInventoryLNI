@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shop Floor Inventory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="auth-container">
+        <button id="login-btn">Login with Google</button>
+    </div>
+
+    <div id="inventory-ui" style="display:none;">
+        <h2 id="user-greeting"></h2>
+        <form id="material-form">
+            <input type="text" id="mat-name" placeholder="Material/Part Name" required>
+            <input type="number" id="mat-qty" placeholder="Quantity Change (+ or -)" required>
+            <button type="submit">Update Sheet</button>
+        </form>
+        <hr>
+        <h3>Recent Activity</h3>
+        <div id="log">Loading sheet data...</div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
