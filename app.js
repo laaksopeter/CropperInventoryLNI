@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAcxV21wY94f-t7v1SiboA-LqajhrdA2qQ",
   authDomain: "cropperiventorylsi.firebaseapp.com",
@@ -11,9 +12,10 @@ const firebaseConfig = {
   measurementId: "G-PJB6W71DX7"
 };
 
-// PASTE YOUR ACTUAL GOOGLE WEB APP URL HERE
+// Google Apps Script URL (Ensure this is your current /exec link)
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCN5wNS4lslN4CgL1FUy22_0SJB7yQsGAh12DzhJydYFC2kC9pA6cEgSFXn8SmoZdm/exec";
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -27,10 +29,14 @@ const userGreeting = document.getElementById('user-greeting');
 const submitBtn = document.getElementById('submit-btn');
 const materialSelect = document.getElementById('mat-name');
 const inventoryList = document.getElementById('inventory-list');
-const searchInput = document.getElementById('inventory-search');
 
-let currentStock = []; // Global memory of stock for filtering
+// Dual Search Elements
+const thickSearch = document.getElementById('search-thickness');
+const sizeSearch = document.getElementById('search-size');
 
+let currentStock = []; // Global variable to hold stock for filtering
+
+// 1. Authentication Logic
 loginBtn.onclick = () => signInWithPopup(auth, provider);
 
 onAuthStateChanged(auth, (user) => {
@@ -44,9 +50,12 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// Load Stock from Google
+// 2. Fetch Inventory from Google Sheets
 async function loadInventory(grade) {
     inventoryList.innerHTML = "<p class='footer-note'>Refreshing stock...</p>";
+    thickSearch.value = ""; 
+    sizeSearch.value = "";
+    
     try {
         const response = await fetch(`${SCRIPT_URL}?grade=${grade}`);
         currentStock = await response.json();
@@ -56,7 +65,7 @@ async function loadInventory(grade) {
     }
 }
 
-// Draw the list (filtered or unfiltered)
+// 3. Render the list to the screen
 function renderInventory(items) {
     inventoryList.innerHTML = "";
     if (items.length === 0) {
@@ -79,49 +88,53 @@ function renderInventory(items) {
     });
 }
 
-// Search Logic
-searchInput.oninput = (e) => {
-    const term = e.target.value.toLowerCase();
-    const filtered = currentStock.filter(item => 
-        item.size.toLowerCase().includes(term) ||
-        item.thickness.toLowerCase().includes(term) ||
-        item.cert.toLowerCase().includes(term) ||
-        item.loc.toLowerCase().includes(term) ||
-        item.id.toLowerCase().includes(term)
-    );
+// 4. Multi-Field Filter Logic
+const filterInventory = () => {
+    const thickTerm = thickSearch.value.toLowerCase();
+    const sizeTerm = sizeSearch.value.toLowerCase();
+    
+    const filtered = currentStock.filter(item => {
+        const matchesThick = item.thickness.toLowerCase().includes(thickTerm);
+        const matchesSize = item.size.toLowerCase().includes(sizeTerm);
+        return matchesThick && matchesSize;
+    });
+    
     renderInventory(filtered);
 };
 
-// Remove Function
+thickSearch.oninput = filterInventory;
+sizeSearch.oninput = filterInventory;
+
+// 5. "Use" Function (Deletes row from Sheet)
 window.useSheet = async (id) => {
     const grade = materialSelect.value;
     if (!confirm(`Confirm removal of sheet ${id}?`)) return;
 
     try {
+        // We use mode: 'no-cors' for Google Apps Script POSTs
         await fetch(SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
             body: JSON.stringify({ action: "DELETE", id: id, item: grade })
         });
         alert("Sheet removed from stock.");
-        loadInventory(grade);
+        loadInventory(grade); // Refresh the view
     } catch (err) {
         alert("Error removing sheet.");
     }
 };
 
-materialSelect.onchange = (e) => {
-    searchInput.value = "";
-    loadInventory(e.target.value);
-};
+materialSelect.onchange = (e) => loadInventory(e.target.value);
 
-// Add Function
+// 6. Add Sheet Logic
 form.onsubmit = async (e) => {
     e.preventDefault();
     submitBtn.innerText = "Syncing...";
     submitBtn.disabled = true;
 
+    // Generate Short Unique ID
     const id = "SH-" + Math.random().toString(36).substr(2, 4).toUpperCase();
+    
     const data = {
         action: "ADD",
         id: id,
