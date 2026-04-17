@@ -23,7 +23,7 @@
         <div id="inventory-ui" class="card" style="display:none;">
             <div class="header">
                 <h2 id="user-greeting">Welcome</h2>
-                <span class="status-badge">Live Sync Active</span>
+                <span class="status-badge">System Active</span>
             </div>
             
             <form id="material-form">
@@ -56,13 +56,17 @@
                     <input type="number" id="mat-qty" placeholder="e.g. 1" required>
                 </div>
 
-                <button type="submit" id="submit-btn" class="btn-submit">Log Sheet Entry</button>
+                <button type="submit" id="submit-btn" class="btn-submit">Add New Sheet</button>
             </form>
-            
-            <p class="footer-note">Specific Tracking ID will be generated automatically.</p>
+
+            <div id="stock-view" style="margin-top: 2rem; border-top: 2px solid #e2e8f0; padding-top: 1rem;">
+                <h3 style="font-size: 1rem; margin-bottom: 10px;">Available Stock</h3>
+                <div id="inventory-list" class="inventory-grid">
+                    <p class="footer-note">Select a grade above to view inventory.</p>
+                </div>
+            </div>
         </div>
     </div>
-
     <script type="module" src="app.js"></script>
 </body>
 </html>

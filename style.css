@@ -34,7 +34,6 @@ body {
 
 .header { margin-bottom: 24px; text-align: center; }
 h1 { font-size: 1.5rem; letter-spacing: -0.025em; margin-bottom: 4px; }
-h2 { font-size: 1.1rem; font-weight: 600; }
 
 .input-group { margin-bottom: 16px; }
 label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
@@ -48,15 +47,12 @@ input, select {
     font-family: inherit;
 }
 
-input:focus, select:focus { outline: none; border-color: var(--primary); }
-
 .btn-primary, .btn-submit {
     width: 100%;
     padding: 12px;
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -65,22 +61,31 @@ input:focus, select:focus { outline: none; border-color: var(--primary); }
 }
 
 .btn-primary { background: white; border: 1px solid var(--border); }
-.btn-primary:hover { background: #f8fafc; }
+.btn-submit { background: var(--primary); color: white; }
 
-.btn-submit { background: var(--primary); color: white; margin-top: 8px; }
-.btn-submit:hover { background: var(--primary-hover); }
-.btn-submit:disabled { background: var(--text-muted); cursor: not-allowed; }
+.inventory-grid { display: flex; flex-direction: column; gap: 8px; }
 
-.status-badge {
-    display: inline-block;
-    background: #dcfce7;
-    color: #166534;
-    font-size: 0.7rem;
-    padding: 4px 10px;
-    border-radius: 20px;
-    margin-top: 8px;
-    font-weight: 700;
-    text-transform: uppercase;
+.stock-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.85rem;
 }
 
-.footer-note { font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 24px; }
+.btn-use {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.footer-note { font-size: 0.75rem; color: var(--text-muted); text-align: center; }
+.status-badge { background: #dcfce7; color: #166534; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; font-weight: 700; }
