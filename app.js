@@ -32,12 +32,12 @@ const sizeSearch = document.getElementById('search-size');
 let currentStock = [];
 
 loginBtn.onclick = () => signInWithPopup(auth, provider);
-logoutBtn.onclick = () => { if (confirm("Sign out of LNI Terminal?")) signOut(auth); };
+logoutBtn.onclick = () => { if (confirm("Log out of LNI Terminal?")) signOut(auth); };
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
         authContainer.style.display = 'none';
-        inventoryUI.style.display = 'block'; 
+        inventoryUI.style.display = 'flex'; // Uses flex for the card inner layout
         userGreeting.innerText = `Worker: ${user.displayName}`;
     } else {
         authContainer.style.display = 'block';
@@ -46,18 +46,18 @@ onAuthStateChanged(auth, (user) => {
 });
 
 async function loadInventory(grade) {
-    inventoryList.innerHTML = "<p class='footer-note'>Querying system...</p>";
+    inventoryList.innerHTML = "<p class='footer-note'>Pulling system logs...</p>";
     thickSearch.value = ""; sizeSearch.value = "";
     try {
         const response = await fetch(`${SCRIPT_URL}?grade=${grade}`);
         currentStock = await response.json();
         renderInventory(currentStock);
-    } catch (err) { inventoryList.innerHTML = "<p class='footer-note'>Database Error.</p>"; }
+    } catch (err) { inventoryList.innerHTML = "<p class='footer-note'>Sync Error.</p>"; }
 }
 
 function renderInventory(items) {
     inventoryList.innerHTML = "";
-    if (items.length === 0) { inventoryList.innerHTML = "<p class='footer-note'>No items found.</p>"; return; }
+    if (items.length === 0) { inventoryList.innerHTML = "<p class='footer-note'>Zero items found.</p>"; return; }
     items.forEach(item => {
         const div = document.createElement('div');
         div.className = "stock-item";

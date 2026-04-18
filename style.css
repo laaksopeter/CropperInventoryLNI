@@ -11,37 +11,33 @@
     --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
 }
 
-/* PREVENT WHITE SCROLL GAPS */
 html {
     background-color: var(--brand-grey-dark);
-    overscroll-behavior: none; /* Kills the Mac 'rubber-band' effect */
+    overscroll-behavior: none;
 }
 
-* { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--brand-grey-dark); 
-    min-height: 100vh;
+    height: 100vh;
     padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden; /* Prevent global body scroll */
 }
 
-.container { width: 100%; max-width: 460px; transition: max-width 0.4s ease; }
+.container { width: 100%; max-width: 460px; transition: max-width 0.4s ease; height: auto; }
 
-/* Main Industrial Card */
 .card {
     background: var(--white);
     padding: 2.5rem 2rem;
     border-radius: 4px;
     box-shadow: var(--shadow);
     border-top: 8px solid var(--brand-black);
+    width: 100%;
 }
 
 /* LOGIN SCREEN */
@@ -50,75 +46,57 @@ body {
 #auth-container p { color: var(--text-muted); margin-bottom: 40px; font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; }
 
 #login-btn { 
-    background: var(--brand-black);
-    color: white;
-    padding: 16px;
-    border-radius: 4px;
-    font-weight: 600;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    cursor: pointer;
-    width: 100%;
-    transition: background 0.2s;
+    background: var(--brand-black); color: white; padding: 16px; border-radius: 4px; font-weight: 600; border: none; display: flex; 
+    align-items: center; justify-content: center; gap: 12px; cursor: pointer; width: 100%; transition: background 0.2s;
 }
 #login-btn:hover { background: var(--brand-orange); }
 #login-btn img { filter: brightness(0) invert(1); width: 18px; }
 
-/* DASHBOARD LOGIC */
-.header { margin-bottom: 30px; padding-bottom: 15px; border-bottom: 2px solid var(--brand-grey-light); }
-.dashboard-layout { display: flex; flex-direction: column; gap: 2rem; }
+/* DASHBOARD LAYOUT */
+.header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--brand-grey-light); }
+.dashboard-layout { display: flex; flex-direction: column; gap: 2rem; overflow: hidden; }
+
+/* INPUTS */
 .input-group { margin-bottom: 18px; }
 label { display: block; font-size: 0.7rem; font-weight: 700; color: var(--brand-black); text-transform: uppercase; margin-bottom: 6px; }
-
-input, select { 
-    width: 100%; 
-    padding: 12px; 
-    border: 1px solid var(--brand-grey-border); 
-    border-radius: 4px; 
-    background: var(--brand-grey-light);
-    font-size: 0.9rem;
-}
+input, select { width: 100%; padding: 12px; border: 1px solid var(--brand-grey-border); border-radius: 4px; background: var(--brand-grey-light); font-size: 0.9rem; }
 input:focus { outline: none; border-color: var(--brand-orange); background: white; }
 
-.btn-submit { 
-    width: 100%; 
-    padding: 16px; 
-    background: var(--brand-orange); 
-    color: white; 
-    border: none; 
-    border-radius: 4px; 
-    font-weight: 700; 
-    cursor: pointer; 
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.btn-submit { width: 100%; padding: 16px; background: var(--brand-orange); color: white; border: none; border-radius: 4px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+
+/* INDEPENDENT SCROLLING (Desktop Only) */
+@media (min-width: 950px) {
+    .container { max-width: 1200px; height: 90vh; display: flex; flex-direction: column; }
+    .card { height: 100%; display: flex; flex-direction: column; }
+    .dashboard-layout { flex-direction: row; flex: 1; overflow: hidden; }
+    
+    #material-form { 
+        flex: 1; border-right: 2px solid var(--brand-grey-light); padding-right: 2.5rem; 
+        overflow-y: auto; height: 100%; padding-bottom: 20px;
+    }
+    
+    #stock-view { flex: 1.5; display: flex; flex-direction: column; height: 100%; }
+    
+    .inventory-grid { 
+        flex: 1; overflow-y: auto; padding-right: 10px; margin-top: 10px; 
+    }
 }
 
 /* LIST ITEMS */
 .stock-item { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    padding: 15px; 
-    background: white; 
-    border: 1px solid var(--brand-grey-light); 
-    border-left: 4px solid var(--brand-black); 
-    margin-bottom: 8px; 
+    display: flex; justify-content: space-between; align-items: center; padding: 15px; background: white; 
+    border: 1px solid var(--brand-grey-light); border-left: 4px solid var(--brand-black); margin-bottom: 8px; 
 }
 .stock-item:hover { border-left-color: var(--brand-orange); background: var(--brand-grey-light); }
 
 .btn-use { background: var(--brand-black); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 0.7rem; }
 .btn-logout { background: transparent; color: var(--text-muted); border: 1px solid var(--brand-grey-border); padding: 6px 12px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; }
 
-/* RESPONSIVE DASHBOARD */
-@media (min-width: 950px) {
-    .container { max-width: 1150px; }
-    .dashboard-layout { flex-direction: row; align-items: flex-start; }
-    #material-form { flex: 1; border-right: 2px solid var(--brand-grey-light); padding-right: 2.5rem; }
-    #stock-view { flex: 1.5; }
-}
-
 .status-badge { background: var(--brand-black); color: white; font-size: 0.6rem; padding: 4px 8px; border-radius: 2px; text-transform: uppercase; }
-.footer-note { font-size: 0.7rem; color: var(--text-muted); text-align: center; }
+.footer-note { font-size: 0.7rem; color: var(--text-muted); text-align: center; margin-top: 10px; }
+
+/* CUSTOM SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--brand-grey-light); }
+::-webkit-scrollbar-thumb { background: var(--brand-grey-border); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-orange); }
