@@ -173,3 +173,15 @@ document.getElementById('material-form').onsubmit = async (e) => {
     loadInventory(data.item);
     submitBtn.innerText = "Add Entry"; submitBtn.disabled = false;
 };
+
+document.getElementById('bulk-import-btn').onclick = () => {
+    document.getElementById('csv-file').click();
+};
+
+document.getElementById('csv-file').onchange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        alert(`Selected CSV: ${file.name}`);
+        // TODO: Implement CSV processing logic here
+    }
+};

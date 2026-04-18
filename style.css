@@ -51,6 +51,8 @@ input, select { width: 100%; padding: 12px; border: 1px solid var(--brand-grey-b
 .btn-mode { flex: 1; padding: 12px; border: 1px solid var(--brand-grey-border); cursor: pointer; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
 .btn-mode.active { background: var(--brand-black); color: white; border-color: var(--brand-black); }
 .btn-submit { width: 100%; padding: 18px; background: var(--brand-orange); color: white; border: none; font-weight: 800; text-transform: uppercase; cursor: pointer; border-radius: 4px; }
+.search-row { display: flex; gap: 10px; }
+.search-row input { flex: 1; }
 
 /* --- MODAL --- */
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
