@@ -48,7 +48,7 @@ function setMode(mode) {
         document.getElementById('group-type').style.display = 'none';
         document.getElementById('label-grade').innerText = "Material Grade";
         document.getElementById('label-dim').innerText = "Thickness";
-        document.getElementById('label-len').innerText = "Size (W x L)";
+        document.getElementById('label-len').innerText = "Size (W x L in Inches)";
         document.getElementById('search-3').placeholder = "Filt. Material";
         updateSelect(matSelect, sheetGrades);
     } else {
@@ -56,8 +56,8 @@ function setMode(mode) {
         modeTube.classList.add('active');
         document.getElementById('group-type').style.display = 'block';
         document.getElementById('label-grade').innerText = "Structural Shape";
-        document.getElementById('label-dim').innerText = "Dimensions (OD x Wall)";
-        document.getElementById('label-len').innerText = "Length (Remnant)";
+        document.getElementById('label-dim').innerText = "Dimensions (OD x Wall or Height x Width)";
+        document.getElementById('label-len').innerText = "Length (Remnant in Inches)";
         document.getElementById('search-3').placeholder = "Filt. Material";
         updateSelect(matSelect, tubeShapes);
         updateSelect(structTypeSelect, tubeMaterials);
