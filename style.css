@@ -5,73 +5,72 @@
     --brand-grey-border: #cbd5e1;
     --brand-grey-light: #f8fafc;
     --text-muted: #64748b;
-    --red-offline: #ef4444;
+    --red-alert: #dc2626;
+    --green-active: #16a34a;
 }
 
-/* MOBILE FIRST */
+/* GLOBAL MOBILE-FIRST RESET */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { background-color: var(--brand-grey-dark); }
-
-body { 
-    font-family: 'Inter', sans-serif; 
-    background-color: var(--brand-grey-dark);
-    display: flex; justify-content: center; padding: 10px; min-height: 100vh;
-}
-
+body { font-family: 'Inter', sans-serif; display: flex; justify-content: center; padding: 15px; min-height: 100vh; }
 .container { width: 100%; max-width: 500px; }
 
-.card {
-    background: white; border-radius: 4px; border-top: 8px solid var(--brand-black);
-    padding: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); width: 100%;
+/* RE-DESIGNED LOGIN PAGE */
+.login-card {
+    text-align: center;
+    border-top: 10px solid var(--brand-black) !important;
+    padding: 3rem 2rem !important;
 }
+.logo-accent { width: 40px; height: 6px; background: var(--brand-orange); margin: 0 auto 20px; border-radius: 10px; }
+.login-header h1 { font-size: 1.8rem; letter-spacing: 2px; color: var(--brand-black); font-weight: 800; margin-bottom: 5px; }
+.login-header p { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; letter-spacing: 1px; margin-bottom: 40px; }
 
+.google-signin {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 15px;
+    background: var(--brand-black); color: white; border: none; padding: 16px;
+    border-radius: 4px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.2s;
+}
+.google-signin:hover { background: #111827; }
+.google-signin img { width: 20px; }
+
+.login-footer { margin-top: 50px; }
+.warning-text { color: var(--red-alert); font-size: 0.65rem; font-weight: 800; letter-spacing: 2px; }
+.login-footer p { font-size: 0.6rem; color: var(--text-muted); margin-top: 5px; }
+
+/* APP INTERFACE */
+.card { background: white; border-radius: 4px; padding: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); width: 100%; }
 .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--brand-grey-light); padding-bottom: 15px; }
 
-/* HEALTH BADGE STYLES */
+/* HEALTH BADGE LOGIC */
 .status-badge { 
-    background: var(--brand-black); color: white; font-size: 0.6rem; 
-    padding: 3px 8px; border-radius: 2px; text-transform: uppercase; 
-    font-weight: 800; transition: background 0.3s ease;
+    background: var(--green-active); color: white; font-size: 0.65rem; 
+    padding: 4px 10px; border-radius: 3px; text-transform: uppercase; font-weight: 800; 
 }
-
-.status-badge.offline {
-    background: var(--red-offline);
-    animation: pulse-red 2s infinite;
+.status-badge.offline { 
+    background: var(--red-alert) !important; 
+    animation: alert-pulse 1.5s infinite; 
 }
+@keyframes alert-pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-@keyframes pulse-red {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
-
-/* Mobile Layout */
+/* LAYOUT & INPUTS */
 .dashboard-layout { display: block; }
 .entry-pane { margin-bottom: 40px; }
-
 .input-group { margin-bottom: 15px; }
 label { display: block; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; color: var(--brand-black); }
 input, select { width: 100%; padding: 12px; border: 1px solid var(--brand-grey-border); border-radius: 4px; font-size: 1rem; background: var(--brand-grey-light); }
-
 .mode-toggle { display: flex; gap: 2px; }
 .btn-mode { flex: 1; padding: 12px; border: 1px solid var(--brand-grey-border); cursor: pointer; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
 .btn-mode.active { background: var(--brand-black); color: white; border-color: var(--brand-black); }
-
 .btn-submit { width: 100%; padding: 18px; background: var(--brand-orange); color: white; border: none; font-weight: 800; text-transform: uppercase; cursor: pointer; border-radius: 4px; }
-.btn-logout { background: none; border: 1px solid var(--brand-grey-border); padding: 6px 12px; font-size: 0.65rem; font-weight: 700; border-radius: 4px; cursor: pointer; }
 
-.pane-title { font-size: 0.85rem; margin-bottom: 15px; color: var(--brand-black); text-transform: uppercase; letter-spacing: 1px; }
+/* STOCK VIEW */
+.pane-title { font-size: 0.85rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
 .search-row { display: flex; gap: 4px; margin-bottom: 15px; }
 .search-row input { padding: 10px; font-size: 0.8rem; }
-
-.stock-item { 
-    display: flex; justify-content: space-between; align-items: center; 
-    padding: 15px; background: white; border: 1px solid var(--brand-grey-border); 
-    border-left: 6px solid var(--brand-black); margin-bottom: 12px; border-radius: 4px;
-}
+.stock-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 1px solid var(--brand-grey-border); border-left: 6px solid var(--brand-black); margin-bottom: 12px; border-radius: 4px; }
 .btn-use { flex-shrink: 0; background: var(--brand-black); color: white; padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 0.75rem; }
 
-/* DESKTOP TERMINAL VIEW */
+/* DESKTOP VIEW */
 @media (min-width: 1024px) {
     body { height: 100vh; overflow: hidden; align-items: center; padding: 0; }
     .container { max-width: 1300px; height: 90vh; }
@@ -79,5 +78,5 @@ input, select { width: 100%; padding: 12px; border: 1px solid var(--brand-grey-b
     .dashboard-layout { display: flex; flex-direction: row; height: 100%; overflow: hidden; gap: 45px; }
     .entry-pane { flex: 1; overflow-y: auto; padding-right: 30px; border-right: 1px solid var(--brand-grey-light); margin-bottom: 0; }
     #stock-view { flex: 1.8; display: flex; flex-direction: column; overflow: hidden; }
-    .inventory-grid { flex: 1; overflow-y: auto; padding-right: 5px; }
+    .inventory-grid { flex: 1; overflow-y: auto; }
 }

@@ -21,8 +21,7 @@ const structTypeSelect = document.getElementById('struct-type');
 const modeSheet = document.getElementById('mode-sheet');
 const modeTube = document.getElementById('mode-tube');
 const inventoryList = document.getElementById('inventory-list');
-const loginBtn = document.getElementById('login-btn');
-const logoutBtn = document.getElementById('logout-btn');
+const healthBadge = document.getElementById('health-badge');
 
 let currentMode = 'Sheet';
 let currentStock = [];
@@ -35,20 +34,20 @@ const tubeMaterials = ["6061", "A513", "A500", "DOM", "4130", "Stainless", "Othe
  * Health Monitor Logic
  */
 async function checkSystemHealth() {
-    const badge = document.querySelector('.status-badge');
     try {
         const response = await fetch(`${SCRIPT_URL}?grade=HEALTH_CHECK`);
         if (response.ok) {
-            badge.innerText = "System Active";
-            badge.classList.remove('offline');
+            healthBadge.innerText = "System Active";
+            healthBadge.classList.remove('offline');
         } else { throw new Error(); }
     } catch (err) {
-        badge.innerText = "System Offline";
-        badge.classList.add('offline');
+        healthBadge.innerText = "System Offline";
+        healthBadge.classList.add('offline');
     }
 }
 
-setInterval(checkSystemHealth, 30000);
+// Initial check + Repeat
+setInterval(checkSystemHealth, 20000);
 
 function setMode(mode) {
     currentMode = mode;
@@ -84,8 +83,8 @@ modeSheet.onclick = () => setMode('Sheet');
 modeTube.onclick = () => setMode('Structural');
 setMode('Sheet'); 
 
-loginBtn.onclick = () => signInWithPopup(auth, provider);
-logoutBtn.onclick = () => { if (confirm("Log out?")) signOut(auth); };
+document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
+document.getElementById('logout-btn').onclick = () => { if (confirm("Log out?")) signOut(auth); };
 
 onAuthStateChanged(auth, (user) => {
     document.getElementById('auth-container').style.display = user ? 'none' : 'block';

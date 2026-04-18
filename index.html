@@ -9,22 +9,29 @@
 </head>
 <body>
     <div class="container">
-        <div id="auth-container" class="card">
-            <div class="header" style="border:none; margin-bottom: 0;">
+        <div id="auth-container" class="card login-card">
+            <div class="login-header">
+                <div class="logo-accent"></div>
                 <h1>LNI TERMINAL</h1>
-                <p>Laser North Inventory Control</p>
+                <p>LASER NORTH INVENTORY SYSTEM</p>
             </div>
-            <button id="login-btn">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-                Sign in with Google
-            </button>
+            <div class="login-body">
+                <button id="login-btn" class="google-signin">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                    <span>Operator Sign-In</span>
+                </button>
+            </div>
+            <div class="login-footer">
+                <span class="warning-text">RESTRICTED ACCESS</span>
+                <p>AUTHORIZED PERSONNEL ONLY</p>
+            </div>
         </div>
 
         <div id="inventory-ui" class="card" style="display:none;">
             <div class="header">
                 <div>
                     <h2 id="user-greeting">Welcome</h2>
-                    <span class="status-badge">System Active</span>
+                    <span id="health-badge" class="status-badge">Checking System...</span>
                 </div>
                 <button id="logout-btn" class="btn-logout">Logout</button>
             </div>
