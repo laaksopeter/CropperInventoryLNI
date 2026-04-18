@@ -17,7 +17,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// DOM Elements
 const loginBtn = document.getElementById('login-btn');
 const logoutBtn = document.getElementById('logout-btn');
 const inventoryUI = document.getElementById('inventory-ui');
@@ -32,19 +31,15 @@ const sizeSearch = document.getElementById('search-size');
 
 let currentStock = [];
 
-// Authentication Logic
 loginBtn.onclick = () => signInWithPopup(auth, provider);
-
-logoutBtn.onclick = () => {
-    if (confirm("Log out of LNI Terminal?")) {
-        signOut(auth);
-    }
-};
+logoutBtn.onclick = () => { if (confirm("Log out?")) signOut(auth); };
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
         authContainer.style.display = 'none';
-        inventoryUI.style.display = 'block';
+        // Check window size to decide between flex or block
+        inventoryUI.style.display = window.innerWidth > 950 ? 'block' : 'block'; 
+        // Style.css handles the inner flex, so we just show the card
         userGreeting.innerText = `Worker: ${user.displayName}`;
     } else {
         authContainer.style.display = 'block';
@@ -54,24 +49,17 @@ onAuthStateChanged(auth, (user) => {
 
 async function loadInventory(grade) {
     inventoryList.innerHTML = "<p class='footer-note'>Refreshing stock...</p>";
-    thickSearch.value = ""; 
-    sizeSearch.value = "";
+    thickSearch.value = ""; sizeSearch.value = "";
     try {
         const response = await fetch(`${SCRIPT_URL}?grade=${grade}`);
         currentStock = await response.json();
         renderInventory(currentStock);
-    } catch (err) {
-        inventoryList.innerHTML = "<p class='footer-note'>Error loading inventory.</p>";
-    }
+    } catch (err) { inventoryList.innerHTML = "<p class='footer-note'>Error.</p>"; }
 }
 
 function renderInventory(items) {
     inventoryList.innerHTML = "";
-    if (items.length === 0) {
-        inventoryList.innerHTML = "<p class='footer-note'>No matching sheets found.</p>";
-        return;
-    }
-
+    if (items.length === 0) { inventoryList.innerHTML = "<p class='footer-note'>Empty.</p>"; return; }
     items.forEach(item => {
         const div = document.createElement('div');
         div.className = "stock-item";
@@ -82,53 +70,33 @@ function renderInventory(items) {
                 <small style="color:var(--text-muted)">Notes: ${item.other || "N/A"}</small><br>
                 <small style="color:var(--brand-orange); font-weight:700;">ID: ${item.id}</small>
             </div>
-            <button class="btn-use" onclick="window.useSheet('${item.id}')">USE</button>
-        `;
+            <button class="btn-use" onclick="window.useSheet('${item.id}')">USE</button>`;
         inventoryList.appendChild(div);
     });
 }
 
 const filterInventory = () => {
-    const thickTerm = thickSearch.value.toLowerCase();
-    const sizeTerm = sizeSearch.value.toLowerCase();
-    const filtered = currentStock.filter(item => {
-        return item.thickness.toLowerCase().includes(thickTerm) && 
-               item.size.toLowerCase().includes(sizeTerm);
-    });
-    renderInventory(filtered);
+    const t = thickSearch.value.toLowerCase();
+    const s = sizeSearch.value.toLowerCase();
+    renderInventory(currentStock.filter(i => i.thickness.toLowerCase().includes(t) && i.size.toLowerCase().includes(s)));
 };
 
 thickSearch.oninput = filterInventory;
 sizeSearch.oninput = filterInventory;
+materialSelect.onchange = (e) => loadInventory(e.target.value);
 
 window.useSheet = async (id) => {
-    const grade = materialSelect.value;
-    if (!confirm(`Confirm removal of sheet ${id}?`)) return;
-    try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: JSON.stringify({ action: "DELETE", id: id, item: grade })
-        });
-        alert("Sheet removed.");
-        loadInventory(grade);
-    } catch (err) {
-        alert("Error removing sheet.");
-    }
+    if (!confirm(`Remove ${id}?`)) return;
+    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "DELETE", id, item: materialSelect.value }) });
+    loadInventory(materialSelect.value);
 };
-
-materialSelect.onchange = (e) => loadInventory(e.target.value);
 
 form.onsubmit = async (e) => {
     e.preventDefault();
-    submitBtn.innerText = "Syncing...";
-    submitBtn.disabled = true;
-
+    submitBtn.innerText = "Syncing..."; submitBtn.disabled = true;
     const id = "SH-" + Math.random().toString(36).substr(2, 4).toUpperCase();
     const data = {
-        action: "ADD",
-        id: id,
-        item: materialSelect.value,
+        action: "ADD", id, item: materialSelect.value,
         size: document.getElementById('sheet-size').value,
         thickness: document.getElementById('thickness').value,
         cert: document.getElementById('cert-num').value,
@@ -136,16 +104,8 @@ form.onsubmit = async (e) => {
         other: document.getElementById('other-info').value || "N/A",
         user: auth.currentUser.email
     };
-
-    try {
-        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
-        alert(`Success! ID: ${id} added.`);
-        form.reset();
-        loadInventory(data.item);
-    } catch (err) {
-        alert("Error adding sheet.");
-    } finally {
-        submitBtn.innerText = "Add to Inventory";
-        submitBtn.disabled = false;
-    }
+    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+    form.reset();
+    loadInventory(data.item);
+    submitBtn.innerText = "Add to Inventory"; submitBtn.disabled = false;
 };

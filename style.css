@@ -1,17 +1,14 @@
 :root {
-    /* LNI Brand Palette */
     --brand-orange: #f97316;
     --brand-orange-hover: #ea580c;
     --brand-black: #0f172a;
     --brand-grey-dark: #334155;
     --brand-grey-light: #f1f5f9;
-    
     --bg-main: #e2e8f0;
     --text-main: #1e293b;
     --text-muted: #64748b;
     --border: #cbd5e1;
     --white: #ffffff;
-    
     --shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
@@ -20,17 +17,15 @@
 body {
     font-family: 'Inter', sans-serif;
     background: radial-gradient(circle at center, #334155 0%, #0f172a 100%);
-    color: var(--text-main);
+    min-height: 100vh;
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 20px;
 }
 
-.container { width: 100%; max-width: 460px; }
+.container { width: 100%; max-width: 460px; transition: max-width 0.4s ease; }
 
-/* Main Card Logic */
 .card {
     background: var(--white);
     padding: 1.5rem;
@@ -39,107 +34,33 @@ body {
     border-top: 8px solid var(--brand-black);
 }
 
-/* LOGIN SPECIFIC (The Auth Container) */
-#auth-container {
-    text-align: center;
-    border-top-color: var(--brand-orange);
-    background: var(--brand-black);
-    color: white;
-}
+#auth-container { text-align: center; border-top-color: var(--brand-orange); background: var(--brand-black); color: white; }
+#login-btn { background: white; color: var(--brand-black); padding: 14px; border-radius: 6px; font-weight: 700; border: none; display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; width: 100%; }
 
-#auth-container h1 { color: var(--brand-orange); font-size: 1.75rem; margin-bottom: 8px; }
-#auth-container p { color: var(--border); margin-bottom: 30px; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; }
+/* Layout Logic */
+.dashboard-layout { display: flex; flex-direction: column; gap: 2rem; }
 
-#login-btn {
-    background: white;
-    color: var(--brand-black);
-    padding: 14px;
-    border-radius: 6px;
-    font-weight: 700;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    cursor: pointer;
-    transition: all 0.3s;
-    width: 100%;
-}
-
-#login-btn:hover { transform: translateY(-2px); background: var(--brand-grey-light); box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4); }
-
-/* MAIN APP UI */
-.header { margin-bottom: 24px; text-align: left; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
-h1, h2 { text-transform: uppercase; letter-spacing: 0.05em; color: var(--brand-black); }
-
+/* Form Elements */
+.header { margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
 .input-group { margin-bottom: 14px; }
-label { display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; color: var(--brand-grey-dark); text-transform: uppercase; }
+label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--brand-grey-dark); text-transform: uppercase; margin-bottom: 4px; }
+input, select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 4px; background: var(--brand-grey-light); }
+.btn-submit { width: 100%; padding: 14px; background: var(--brand-orange); color: white; border: none; border-radius: 4px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
 
-input, select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    font-size: 0.95rem;
-    background-color: var(--brand-grey-light);
+/* Stock View Elements */
+.search-row { display: flex; gap: 10px; margin-bottom: 15px; }
+.search-row input { flex: 1; }
+.stock-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: white; border: 1px solid var(--border); border-left: 5px solid var(--brand-grey-dark); margin-bottom: 6px; }
+.btn-use { background: var(--brand-black); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 0.75rem; }
+.btn-logout { background: transparent; color: var(--text-muted); border: 1px solid var(--border); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; font-weight: 700; }
+
+/* Desktop Split Screen */
+@media (min-width: 950px) {
+    .container { max-width: 1100px; }
+    .dashboard-layout { flex-direction: row; align-items: flex-start; }
+    #material-form { flex: 1; border-right: 1px solid var(--border); padding-right: 2rem; }
+    #stock-view { flex: 1.5; margin-top: 0; }
 }
-
-input:focus { outline: none; border-color: var(--brand-orange); background-color: #fff; }
-
-.btn-submit {
-    width: 100%;
-    padding: 14px;
-    background: var(--brand-orange);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-weight: 700;
-    text-transform: uppercase;
-    cursor: pointer;
-}
-
-.btn-submit:hover { background: var(--brand-orange-hover); }
-
-.btn-logout {
-    background: transparent;
-    color: var(--text-muted);
-    border: 1px solid var(--border);
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    cursor: pointer;
-}
-
-.btn-logout:hover { background: var(--brand-black); color: white; }
-
-.stock-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    background: white;
-    border: 1px solid var(--border);
-    border-left: 5px solid var(--brand-grey-dark);
-    margin-bottom: 6px;
-}
-
-.stock-item:hover { border-left-color: var(--brand-orange); }
-
-.btn-use {
-    background: var(--brand-black);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-weight: 700;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    cursor: pointer;
-}
-
-.btn-use:hover { background: var(--brand-orange); }
 
 .status-badge { background: var(--brand-grey-dark); color: white; font-size: 0.65rem; padding: 3px 8px; border-radius: 2px; font-weight: 700; }
 .footer-note { font-size: 0.7rem; color: var(--text-muted); text-align: center; }

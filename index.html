@@ -27,7 +27,7 @@
         </div>
 
         <div id="inventory-ui" class="card" style="display:none;">
-            <div class="header" style="display: flex; justify-content: space-between; align-items: flex-start; text-align: left;">
+            <div class="header" style="display: flex; justify-content: space-between; align-items: flex-start; text-align: left; width: 100%;">
                 <div>
                     <h2 id="user-greeting" style="font-size: 1rem;">Welcome</h2>
                     <span class="status-badge">Live Inventory</span>
@@ -35,70 +35,69 @@
                 <button id="logout-btn" class="btn-logout">Log Out</button>
             </div>
             
-            <form id="material-form">
-                <div class="input-group">
-                    <label for="mat-name">Material Grade</label>
-                    <select id="mat-name" required>
-                        <option value="" disabled selected>Select Grade...</option>
-                        <option value="A1008">A1008 (CR)</option>
-                        <option value="A1011">A1011 (HR)</option>
-                        <option value="A36">A36 (Steel)</option>
-                        <option value="5052">5052 (Alum)</option>
-                        <option value="5052 Filmed">5052 Filmed(Alum)</option>
-                        <option value="6061">6061 (Alum)</option>
-                        <option value="304 #4">304 #4(SS)</option>
-                        <option value="304 #4 Filmed">304 #4 Filmed(SS)</option>
-                        <option value="304 2B">304 2B(SS)</option>
-                        <option value="304 2B Filmed">304 2B Filmed(SS)</option>
-                        <option value="316 #4">316 #4(SS)</option>
-                        <option value="316 #4 Filmed">316 #4 Filmed(SS)</option>
-                        <option value="316 2B">316 2B(SS)</option>
-                        <option value="316 2B Filmed">316 2B Filmed(SS)</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
+            <div class="dashboard-layout">
+                <form id="material-form">
+                    <div class="input-group">
+                        <label for="mat-name">Material Grade</label>
+                        <select id="mat-name" required>
+                            <option value="" disabled selected>Select Grade...</option>
+                            <option value="A1008">A1008 (CR)</option>
+                            <option value="A1011">A1011 (HR)</option>
+                            <option value="A36">A36 (Steel)</option>
+                            <option value="5052">5052 (Alum)</option>
+                            <option value="5052 Filmed">5052 Filmed(Alum)</option>
+                            <option value="6061">6061 (Alum)</option>
+                            <option value="304 #4">304 #4(SS)</option>
+                            <option value="304 #4 Filmed">304 #4 Filmed(SS)</option>
+                            <option value="304 2B">304 2B(SS)</option>
+                            <option value="304 2B Filmed">304 2B Filmed(SS)</option>
+                            <option value="316 #4">316 #4(SS)</option>
+                            <option value="316 #4 Filmed">316 #4 Filmed(SS)</option>
+                            <option value="316 2B">316 2B(SS)</option>
+                            <option value="316 2B Filmed">316 2B Filmed(SS)</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
 
-                <div class="input-group">
-                    <label for="sheet-size">Size (W x L)</label>
-                    <input type="text" id="sheet-size" placeholder="e.g. 48 x 96" required>
-                </div>
+                    <div class="input-group">
+                        <label for="sheet-size">Size (W x L)</label>
+                        <input type="text" id="sheet-size" placeholder="e.g. 48 x 96" required>
+                    </div>
 
-                <div class="input-group">
-                    <label for="thickness">Thickness</label>
-                    <input type="text" id="thickness" placeholder="e.g. 0.250" required>
-                </div>
+                    <div class="input-group">
+                        <label for="thickness">Thickness</label>
+                        <input type="text" id="thickness" placeholder="e.g. 0.250" required>
+                    </div>
 
-                <div class="input-group">
-                    <label for="cert-num">Cert Number</label>
-                    <input type="text" id="cert-num" placeholder="e.g. C-88234" required>
-                </div>
+                    <div class="input-group">
+                        <label for="cert-num">Cert Number</label>
+                        <input type="text" id="cert-num" placeholder="e.g. C-88234" required>
+                    </div>
 
-                <div class="input-group">
-                    <label for="location">Location (Rack/Bin)</label>
-                    <input type="text" id="location" placeholder="e.g. Rack B-2" required>
-                </div>
+                    <div class="input-group">
+                        <label for="location">Location (Rack/Bin)</label>
+                        <input type="text" id="location" placeholder="e.g. Rack B-2" required>
+                    </div>
 
-                <div class="input-group">
-                    <label for="other-info">Other Information (Optional)</label>
-                    <input type="text" id="other-info" placeholder="e.g. Minor scratches, special alloy details">
-                </div>
+                    <div class="input-group">
+                        <label for="other-info">Other Information (Optional)</label>
+                        <input type="text" id="other-info" placeholder="Notes...">
+                    </div>
 
-                <button type="submit" id="submit-btn" class="btn-submit">Add to Inventory</button>
-            </form>
+                    <button type="submit" id="submit-btn" class="btn-submit">Add to Inventory</button>
+                </form>
 
-            <div id="stock-view" style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
-                <h3 style="font-size: 1rem; margin-bottom: 12px; color: var(--brand-black);">Available Stock</h3>
-                
-                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                    <input type="text" id="search-thickness" placeholder="Filter Thickness" 
-                           style="width: 50%; padding: 10px; font-size: 0.85rem; border: 1px solid var(--border); border-radius: 4px;">
+                <div id="stock-view">
+                    <h3 style="font-size: 1rem; margin-bottom: 12px; color: var(--brand-black);">Available Stock</h3>
                     
-                    <input type="text" id="search-size" placeholder="Filter Size" 
-                           style="width: 50%; padding: 10px; font-size: 0.85rem; border: 1px solid var(--border); border-radius: 4px;">
-                </div>
-                
-                <div id="inventory-list" class="inventory-grid">
-                    <p class="footer-note">Select a grade above to view stock.</p>
+                    <div class="search-row">
+                        <input type="text" id="search-thickness" placeholder="Filter Thickness">
+                        <input type="text" id="search-size" placeholder="Filter Size">
+                    </div>
+                    
+                    <div id="inventory-list" class="inventory-grid">
+                        <p class="footer-note">Select a grade above to view stock.</p>
+                    </div>
                 </div>
             </div>
         </div>
