@@ -10,39 +10,38 @@
     --white: #ffffff;
 }
 
-/* --- GLOBAL MOBILE-FIRST RESET --- */
+/* --- GLOBAL RESET --- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { background-color: var(--brand-grey-dark); }
 body { font-family: 'Inter', sans-serif; display: flex; justify-content: center; padding: 15px; min-height: 100vh; }
 .container { width: 100%; max-width: 500px; }
 
-/* --- LOGIN PAGE --- */
+/* --- LOGIN --- */
 .login-card { text-align: center; border-top: 10px solid var(--brand-black) !important; padding: 3rem 2rem !important; }
 .logo-accent { width: 40px; height: 6px; background: var(--brand-orange); margin: 0 auto 20px; border-radius: 10px; }
 .login-header h1 { font-size: 1.8rem; letter-spacing: 2px; color: var(--brand-black); font-weight: 800; margin-bottom: 5px; }
 .login-header p { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; letter-spacing: 1px; margin-bottom: 40px; }
 .google-signin { width: 100%; display: flex; align-items: center; justify-content: center; gap: 15px; background: var(--brand-black); color: white; border: none; padding: 16px; border-radius: 4px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
-.google-signin:hover { background: #111827; }
 .google-signin img { width: 20px; }
 .login-footer { margin-top: 50px; }
 .warning-text { color: var(--red-alert); font-size: 0.65rem; font-weight: 800; letter-spacing: 2px; }
-.login-footer p { font-size: 0.6rem; color: var(--text-muted); margin-top: 5px; }
 
 /* --- APP INTERFACE --- */
 .card { background: var(--white); border-radius: 4px; padding: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); width: 100%; }
 .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--brand-grey-light); padding-bottom: 15px; }
 
-/* HEALTH BADGE */
-.status-badge { background: var(--green-active); color: white; font-size: 0.65rem; padding: 4px 10px; border-radius: 3px; text-transform: uppercase; font-weight: 800; transition: all 0.3s; }
+.status-badge { background: var(--green-active); color: white; font-size: 0.65rem; padding: 4px 10px; border-radius: 3px; text-transform: uppercase; font-weight: 800; }
 .status-badge.offline { background: var(--red-alert) !important; animation: alert-pulse 1.5s infinite; }
 @keyframes alert-pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-/* LOGOUT BUTTON */
 .btn-logout { background: transparent; color: var(--text-muted); border: 1.5px solid var(--brand-grey-border); padding: 8px 16px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; }
 .btn-logout:hover { color: var(--brand-black); border-color: var(--brand-black); background: var(--brand-grey-light); }
 .btn-logout::before { content: '⎋'; font-size: 1rem; line-height: 0; }
 
-/* LAYOUT & INPUTS */
+.btn-help { background: transparent; color: var(--brand-orange); border: 1.5px solid var(--brand-orange); width: 32px; height: 32px; border-radius: 50%; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+.btn-help:hover { background: var(--brand-orange); color: white; }
+
+/* --- LAYOUT --- */
 .dashboard-layout { display: block; }
 .entry-pane { margin-bottom: 40px; }
 .input-group { margin-bottom: 15px; }
@@ -53,14 +52,17 @@ input, select { width: 100%; padding: 12px; border: 1px solid var(--brand-grey-b
 .btn-mode.active { background: var(--brand-black); color: white; border-color: var(--brand-black); }
 .btn-submit { width: 100%; padding: 18px; background: var(--brand-orange); color: white; border: none; font-weight: 800; text-transform: uppercase; cursor: pointer; border-radius: 4px; }
 
-/* STOCK VIEW */
-.pane-title { font-size: 0.85rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
-.search-row { display: flex; gap: 4px; margin-bottom: 15px; }
-.search-row input { padding: 10px; font-size: 0.8rem; }
-.stock-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 1px solid var(--brand-grey-border); border-left: 6px solid var(--brand-black); margin-bottom: 12px; border-radius: 4px; }
-.btn-use { flex-shrink: 0; background: var(--brand-black); color: white; padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 0.75rem; }
+/* --- MODAL --- */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+.modal-content { margin: 5% auto; width: 90%; max-width: 600px; animation: slideUp 0.3s ease-out; }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.close-modal { float: right; font-size: 1.5rem; cursor: pointer; }
+.help-grid section { margin-top: 20px; }
+.help-grid h3 { font-size: 0.8rem; color: var(--brand-orange); text-transform: uppercase; margin-bottom: 8px; }
+.help-grid ul { padding-left: 20px; font-size: 0.85rem; line-height: 1.6; }
+.csv-preview { background: var(--brand-black); color: #00ff00; padding: 10px; font-family: monospace; font-size: 0.7rem; border-radius: 4px; margin: 10px 0; }
 
-/* --- DESKTOP TERMINAL VIEW --- */
+/* --- DESKTOP --- */
 @media (min-width: 1024px) {
     body { height: 100vh; overflow: hidden; align-items: center; padding: 0; }
     .container { max-width: 1300px; height: 90vh; }

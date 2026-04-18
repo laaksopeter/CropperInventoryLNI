@@ -33,7 +33,10 @@
                     <h2 id="user-greeting">Welcome</h2>
                     <span id="health-badge" class="status-badge">Checking System...</span>
                 </div>
-                <button id="logout-btn" class="btn-logout">Logout</button>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button id="help-btn" class="btn-help">?</button>
+                    <button id="logout-btn" class="btn-logout">Exit Session</button>
+                </div>
             </div>
             
             <div class="dashboard-layout">
@@ -84,6 +87,12 @@
 
                         <button type="submit" id="submit-btn" class="btn-submit">Add Entry</button>
                     </form>
+
+                    <div class="import-section">
+                        <label>Bulk Import</label>
+                        <button type="button" id="import-btn" class="btn-logout" style="width: 100%; justify-content: center; margin-top: 5px;">Upload CSV File</button>
+                        <input type="file" id="csv-file" accept=".csv" style="display: none;">
+                    </div>
                 </div>
 
                 <div id="stock-view">
@@ -100,6 +109,30 @@
             </div>
         </div>
     </div>
+
+    <div id="help-modal" class="modal">
+        <div class="modal-content card">
+            <span class="close-modal">&times;</span>
+            <h2>Terminal User Guide</h2>
+            <div class="help-grid">
+                <section>
+                    <h3>Daily Operations</h3>
+                    <ul>
+                        <li><strong>Adding:</strong> Select Mode, fill details, and Sync. IDs are auto-generated.</li>
+                        <li><strong>Searching:</strong> Use top filters. Search by Thickness, Size, or Cert #.</li>
+                        <li><strong>Using:</strong> Click 'USE' to permanently remove an item from stock.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>CSV Import Format</h3>
+                    <p>Upload a .csv file (no headers) in this exact order:</p>
+                    <div class="csv-preview">SIZE, THICKNESS, CERT, LOCATION, NOTES, MATERIAL</div>
+                    <p><small>*For Sheets, 'Material' can be left blank or match the grade.</small></p>
+                </section>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="app.js"></script>
 </body>
 </html>

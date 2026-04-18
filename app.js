@@ -15,9 +15,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCN5wNS4lslN4CgL1FU
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-provider.setCustomParameters({
-  prompt: 'select_account'
-});
+provider.setCustomParameters({ prompt: 'select_account' });
 
 const matSelect = document.getElementById('mat-name'); 
 const structTypeSelect = document.getElementById('struct-type');
@@ -25,6 +23,7 @@ const modeSheet = document.getElementById('mode-sheet');
 const modeTube = document.getElementById('mode-tube');
 const inventoryList = document.getElementById('inventory-list');
 const healthBadge = document.getElementById('health-badge');
+const helpModal = document.getElementById('help-modal');
 
 let currentMode = 'Sheet';
 let currentStock = [];
@@ -33,24 +32,19 @@ const sheetGrades = ["A1008", "A1011", "A36", "5052", "5052 Filmed", "6061", "30
 const tubeShapes = ["Square", "Rectangle", "Round", "Angle", "Channel", "Bar"];
 const tubeMaterials = ["6061", "A513", "A500", "DOM", "4130", "Stainless", "Other"];
 
-/**
- * Health Monitor Logic
- */
+// HEALTH & MODAL LOGIC
 async function checkSystemHealth() {
     try {
         const response = await fetch(`${SCRIPT_URL}?grade=HEALTH_CHECK`);
-        if (response.ok) {
-            healthBadge.innerText = "System Active";
-            healthBadge.classList.remove('offline');
-        } else { throw new Error(); }
-    } catch (err) {
-        healthBadge.innerText = "System Offline";
-        healthBadge.classList.add('offline');
-    }
+        if (response.ok) { healthBadge.innerText = "System Active"; healthBadge.classList.remove('offline'); }
+        else { throw new Error(); }
+    } catch (err) { healthBadge.innerText = "System Offline"; healthBadge.classList.add('offline'); }
 }
-
-// Initial check + Repeat
 setInterval(checkSystemHealth, 20000);
+
+document.getElementById('help-btn').onclick = () => helpModal.style.display = "block";
+document.querySelector('.close-modal').onclick = () => helpModal.style.display = "none";
+window.onclick = (e) => { if (e.target == helpModal) helpModal.style.display = "none"; };
 
 function setMode(mode) {
     currentMode = mode;
@@ -60,14 +54,12 @@ function setMode(mode) {
         document.getElementById('group-type').style.display = 'none';
         document.getElementById('label-grade').innerText = "Material Grade";
         document.getElementById('label-dim').innerText = "Thickness";
-        document.getElementById('label-len').innerText = "Size (W x L)";
         updateSelect(matSelect, sheetGrades);
     } else {
         modeSheet.classList.remove('active'); modeTube.classList.add('active');
         document.getElementById('group-type').style.display = 'block';
         document.getElementById('label-grade').innerText = "Structural Shape";
         document.getElementById('label-dim').innerText = "Dimensions (OD x Wall)";
-        document.getElementById('label-len').innerText = "Length (Remnant)";
         updateSelect(matSelect, tubeShapes);
         updateSelect(structTypeSelect, tubeMaterials);
     }
@@ -86,18 +78,42 @@ modeSheet.onclick = () => setMode('Sheet');
 modeTube.onclick = () => setMode('Structural');
 setMode('Sheet'); 
 
+// AUTH
 document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
-document.getElementById('logout-btn').onclick = () => { if (confirm("Log out?")) signOut(auth); };
+document.getElementById('logout-btn').onclick = () => { if (confirm("Log out of session?")) signOut(auth); };
 
 onAuthStateChanged(auth, (user) => {
     document.getElementById('auth-container').style.display = user ? 'none' : 'block';
     document.getElementById('inventory-ui').style.display = user ? '' : 'none';
-    if(user) {
-        document.getElementById('user-greeting').innerText = `Worker: ${user.displayName}`;
-        checkSystemHealth();
-    }
+    if(user) { document.getElementById('user-greeting').innerText = `Worker: ${user.displayName}`; checkSystemHealth(); }
 });
 
+// CSV IMPORT
+const fileInput = document.getElementById('csv-file');
+const importBtn = document.getElementById('import-btn');
+importBtn.onclick = () => fileInput.click();
+
+fileInput.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+        const rows = event.target.result.split('\n').filter(r => r.trim() !== '');
+        if (!confirm(`Import ${rows.length} rows to ${matSelect.value}?`)) return;
+        importBtn.innerText = "Syncing Bulk...";
+        for (let line of rows) {
+            const c = line.split(',').map(v => v.trim());
+            if (c.length < 5) continue;
+            const id = (currentMode === 'Sheet' ? "SH-" : "ST-") + Math.random().toString(36).substr(2, 4).toUpperCase();
+            const data = { action: "ADD", id, item: matSelect.value, size: c[0], thickness: c[1], cert: c[2], loc: c[3], other: c[4] || "N/A", other_type: currentMode === 'Structural' ? (c[5] || "Other") : matSelect.value, user: auth.currentUser.email };
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+        }
+        alert("Bulk Sync Complete."); importBtn.innerText = "Upload CSV File"; loadInventory(matSelect.value);
+    };
+    reader.readAsText(file);
+};
+
+// LOAD & RENDER
 async function loadInventory(category) {
     inventoryList.innerHTML = "<p class='footer-note'>Querying system...</p>";
     try {
@@ -150,16 +166,7 @@ document.getElementById('material-form').onsubmit = async (e) => {
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.innerText = "Syncing..."; submitBtn.disabled = true;
     const id = (currentMode === 'Sheet' ? "SH-" : "ST-") + Math.random().toString(36).substr(2, 4).toUpperCase();
-    const data = {
-        action: "ADD", id, item: matSelect.value,
-        thickness: document.getElementById('dim-input').value,
-        size: document.getElementById('len-input').value,
-        cert: document.getElementById('cert-num').value,
-        loc: document.getElementById('location').value,
-        other: document.getElementById('other-info').value || "N/A",
-        other_type: currentMode === 'Structural' ? structTypeSelect.value : matSelect.value,
-        user: auth.currentUser.email
-    };
+    const data = { action: "ADD", id, item: matSelect.value, thickness: document.getElementById('dim-input').value, size: document.getElementById('len-input').value, cert: document.getElementById('cert-num').value, loc: document.getElementById('location').value, other: document.getElementById('other-info').value || "N/A", other_type: currentMode === 'Structural' ? structTypeSelect.value : matSelect.value, user: auth.currentUser.email };
     await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
     document.getElementById('material-form').reset();
     setMode(currentMode);
