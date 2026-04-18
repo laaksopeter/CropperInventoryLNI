@@ -7,7 +7,7 @@
     --text-muted: #64748b;
 }
 
-/* GLOBAL MOBILE-FIRST STYLES */
+/* --- MOBILE FIRST DESIGN --- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { background-color: var(--brand-grey-dark); }
 
@@ -36,37 +36,34 @@ body {
 
 .dashboard-layout { display: flex; flex-direction: column; gap: 40px; }
 
-/* INPUT STYLES */
+/* INPUTS */
 .input-group { margin-bottom: 15px; }
-label { display: block; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; color: var(--brand-black); letter-spacing: 0.5px; }
-input, select { width: 100%; padding: 14px; border: 1px solid var(--brand-grey-border); border-radius: 4px; font-size: 0.95rem; background: var(--brand-grey-light); }
+label { display: block; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; color: var(--brand-black); }
+input, select { width: 100%; padding: 12px; border: 1px solid var(--brand-grey-border); border-radius: 4px; font-size: 1rem; background: var(--brand-grey-light); }
 
 .mode-toggle { display: flex; gap: 2px; }
 .btn-mode { flex: 1; padding: 12px; border: 1px solid var(--brand-grey-border); cursor: pointer; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
 .btn-mode.active { background: var(--brand-black); color: white; border-color: var(--brand-black); }
 
-.btn-submit { width: 100%; padding: 18px; background: var(--brand-orange); color: white; border: none; font-weight: 800; text-transform: uppercase; cursor: pointer; border-radius: 4px; margin-top: 10px; }
-.btn-logout { background: none; border: 1px solid var(--brand-grey-border); padding: 6px 12px; font-size: 0.65rem; font-weight: 700; border-radius: 4px; cursor: pointer; color: var(--text-muted); }
+.btn-submit { width: 100%; padding: 18px; background: var(--brand-orange); color: white; border: none; font-weight: 800; text-transform: uppercase; cursor: pointer; border-radius: 4px; }
+.btn-logout { background: none; border: 1px solid var(--brand-grey-border); padding: 6px 12px; font-size: 0.65rem; font-weight: 700; border-radius: 4px; cursor: pointer; }
 
-/* SEARCH & LIST */
+/* SEARCH & ITEMS */
 .pane-title { font-size: 0.85rem; margin-bottom: 15px; color: var(--brand-black); text-transform: uppercase; letter-spacing: 1px; }
 .search-row { display: flex; gap: 4px; margin-bottom: 15px; }
 .search-row input { padding: 10px; font-size: 0.8rem; }
+.stock-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 1px solid var(--brand-grey-border); border-left: 6px solid var(--brand-black); margin-bottom: 10px; }
+.btn-use { background: var(--brand-black); color: white; padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: 700; }
+.footer-note { font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 10px; }
 
-.stock-item { 
-    display: flex; justify-content: space-between; align-items: center; padding: 15px; 
-    border: 1px solid var(--brand-grey-border); border-left: 6px solid var(--brand-black); margin-bottom: 10px; 
-}
-.btn-use { background: var(--brand-black); color: white; padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 0.75rem; }
-
-/* DESKTOP TERMINAL VIEW (Triggered on MacBook) */
-@media (min-width: 950px) {
+/* --- DESKTOP TERMINAL VIEW (Triggered on MacBook) --- */
+@media (min-width: 1024px) {
     body { height: 100vh; overflow: hidden; align-items: center; padding: 0; }
-    .container { max-width: 1280px; height: 90vh; }
+    .container { max-width: 1300px; height: 90vh; }
     .card { height: 100%; display: flex; flex-direction: column; padding: 30px; }
-    .dashboard-layout { flex-direction: row; height: 100%; overflow: hidden; gap: 50px; }
+    .dashboard-layout { flex-direction: row; height: 100%; overflow: hidden; gap: 45px; }
     
     .entry-pane { flex: 1; overflow-y: auto; padding-right: 30px; border-right: 1px solid var(--brand-grey-light); }
     #stock-view { flex: 1.8; display: flex; flex-direction: column; overflow: hidden; }
-    .inventory-grid { flex: 1; overflow-y: auto; padding-right: 10px; }
+    .inventory-grid { flex: 1; overflow-y: auto; padding-right: 5px; }
 }

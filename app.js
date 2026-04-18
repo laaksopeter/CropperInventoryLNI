@@ -66,12 +66,12 @@ modeTube.onclick = () => setMode('Structural');
 setMode('Sheet'); 
 
 loginBtn.onclick = () => signInWithPopup(auth, provider);
-logoutBtn.onclick = () => signOut(auth);
+logoutBtn.onclick = () => { if (confirm("Log out of LNI Terminal?")) signOut(auth); };
 
 onAuthStateChanged(auth, (user) => {
     document.getElementById('auth-container').style.display = user ? 'none' : 'block';
-    // Use block for mobile stacking compatibility
-    document.getElementById('inventory-ui').style.display = user ? 'block' : 'none';
+    // Use empty string to let CSS media queries control display behavior
+    document.getElementById('inventory-ui').style.display = user ? '' : 'none';
     if(user) document.getElementById('user-greeting').innerText = `Worker: ${user.displayName}`;
 });
 
@@ -96,7 +96,7 @@ function renderInventory(items) {
         (i.other_type || "").toLowerCase().includes(s3)
     );
 
-    if (filtered.length === 0) { inventoryList.innerHTML = "<p class='footer-note'>Empty.</p>"; return; }
+    if (filtered.length === 0) { inventoryList.innerHTML = "<p class='footer-note'>No items found.</p>"; return; }
 
     filtered.forEach(item => {
         const div = document.createElement('div');
@@ -126,7 +126,6 @@ document.getElementById('material-form').onsubmit = async (e) => {
     e.preventDefault();
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.innerText = "Syncing..."; submitBtn.disabled = true;
-    
     const id = (currentMode === 'Sheet' ? "SH-" : "ST-") + Math.random().toString(36).substr(2, 4).toUpperCase();
     const data = {
         action: "ADD", id, item: matSelect.value,
@@ -138,7 +137,6 @@ document.getElementById('material-form').onsubmit = async (e) => {
         other_type: currentMode === 'Structural' ? structTypeSelect.value : matSelect.value,
         user: auth.currentUser.email
     };
-
     await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
     document.getElementById('material-form').reset();
     setMode(currentMode);
