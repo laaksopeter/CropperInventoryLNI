@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAcxV21wY94f-t7v1SiboA-LqajhrdA2qQ",
   authDomain: "cropperiventorylsi.firebaseapp.com",
@@ -16,6 +17,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+// DOM Elements
 const matSelect = document.getElementById('mat-name'); 
 const structTypeSelect = document.getElementById('struct-type');
 const modeSheet = document.getElementById('mode-sheet');
@@ -27,28 +29,36 @@ const logoutBtn = document.getElementById('logout-btn');
 let currentMode = 'Sheet';
 let currentStock = [];
 
+// Data Definitions
 const sheetGrades = ["A1008", "A1011", "A36", "5052", "5052 Filmed", "6061", "304 #4", "304 2B", "316", "Other"];
 const tubeShapes = ["Square", "Rectangle", "Round", "Angle", "Channel", "Bar"];
 const tubeMaterials = ["6061", "A513", "A500", "DOM", "4130", "Stainless", "Other"];
 
+/**
+ * UI & Mode Logic
+ */
 function setMode(mode) {
     currentMode = mode;
     inventoryList.innerHTML = "<p class='footer-note'>Select a category above.</p>";
     currentStock = [];
 
     if (mode === 'Sheet') {
-        modeSheet.classList.add('active'); modeTube.classList.remove('active');
+        modeSheet.classList.add('active'); 
+        modeTube.classList.remove('active');
         document.getElementById('group-type').style.display = 'none';
         document.getElementById('label-grade').innerText = "Material Grade";
         document.getElementById('label-dim').innerText = "Thickness";
         document.getElementById('label-len').innerText = "Size (W x L)";
+        document.getElementById('search-3').placeholder = "Filt. Material";
         updateSelect(matSelect, sheetGrades);
     } else {
-        modeSheet.classList.remove('active'); modeTube.classList.add('active');
+        modeSheet.classList.remove('active'); 
+        modeTube.classList.add('active');
         document.getElementById('group-type').style.display = 'block';
         document.getElementById('label-grade').innerText = "Structural Shape";
         document.getElementById('label-dim').innerText = "Dimensions (OD x Wall)";
         document.getElementById('label-len').innerText = "Length (Remnant)";
+        document.getElementById('search-3').placeholder = "Filt. Material";
         updateSelect(matSelect, tubeShapes);
         updateSelect(structTypeSelect, tubeMaterials);
     }
@@ -65,10 +75,15 @@ function updateSelect(element, options) {
 
 modeSheet.onclick = () => setMode('Sheet');
 modeTube.onclick = () => setMode('Structural');
+
+// Initial Setup
 setMode('Sheet'); 
 
+/**
+ * Authentication
+ */
 loginBtn.onclick = () => signInWithPopup(auth, provider);
-logoutBtn.onclick = () => signOut(auth);
+logoutBtn.onclick = () => { if (confirm("Log out of LNI Terminal?")) signOut(auth); };
 
 onAuthStateChanged(auth, (user) => {
     document.getElementById('auth-container').style.display = user ? 'none' : 'block';
@@ -76,13 +91,18 @@ onAuthStateChanged(auth, (user) => {
     if(user) document.getElementById('user-greeting').innerText = `Worker: ${user.displayName}`;
 });
 
+/**
+ * Inventory Actions
+ */
 async function loadInventory(category) {
-    inventoryList.innerHTML = "<p class='footer-note'>Accessing database...</p>";
+    inventoryList.innerHTML = "<p class='footer-note'>Querying system data...</p>";
     try {
         const response = await fetch(`${SCRIPT_URL}?grade=${category}`);
         currentStock = await response.json();
         renderInventory(currentStock);
-    } catch (err) { inventoryList.innerHTML = "<p class='footer-note'>Database Error.</p>"; }
+    } catch (err) { 
+        inventoryList.innerHTML = "<p class='footer-note'>Sync Error. Check network.</p>"; 
+    }
 }
 
 function renderInventory(items) {
@@ -97,7 +117,10 @@ function renderInventory(items) {
         (i.other_type || "").toLowerCase().includes(s3)
     );
 
-    if (filtered.length === 0) { inventoryList.innerHTML = "<p class='footer-note'>Empty.</p>"; return; }
+    if (filtered.length === 0) { 
+        inventoryList.innerHTML = "<p class='footer-note'>No items found.</p>"; 
+        return; 
+    }
 
     filtered.forEach(item => {
         const div = document.createElement('div');
@@ -132,6 +155,7 @@ function renderInventory(items) {
     });
 }
 
+// Global search inputs
 ['search-1', 'search-2', 'search-3'].forEach(id => {
     document.getElementById(id).oninput = () => renderInventory(currentStock);
 });
@@ -140,31 +164,49 @@ matSelect.onchange = (e) => loadInventory(e.target.value);
 
 window.useSheet = async (id) => {
     if (!confirm(`Mark ${id} as used?`)) return;
-    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "DELETE", id, item: matSelect.value }) });
+    await fetch(SCRIPT_URL, { 
+        method: 'POST', 
+        mode: 'no-cors', 
+        body: JSON.stringify({ action: "DELETE", id, item: matSelect.value }) 
+    });
     loadInventory(matSelect.value);
 };
 
+/**
+ * Form Submission
+ */
 document.getElementById('material-form').onsubmit = async (e) => {
     e.preventDefault();
     const submitBtn = document.getElementById('submit-btn');
-    submitBtn.innerText = "Syncing..."; submitBtn.disabled = true;
+    submitBtn.innerText = "Syncing..."; 
+    submitBtn.disabled = true;
     
+    // ID prefix based on mode
     const id = (currentMode === 'Sheet' ? "SH-" : "ST-") + Math.random().toString(36).substr(2, 4).toUpperCase();
+    
     const data = {
-        action: "ADD", id, item: matSelect.value,
+        action: "ADD", 
+        id, 
+        item: matSelect.value, // Spreadsheet Tab Name
         thickness: document.getElementById('dim-input').value,
         size: document.getElementById('len-input').value,
         cert: document.getElementById('cert-num').value,
         loc: document.getElementById('location').value,
         other: document.getElementById('other-info').value || "N/A",
-        // UPDATED: Sheets now log Material Grade in Column H (other_type)
+        // Logic fix: Sheets log Grade in Column H, Structural logs Material Type in Column H
         other_type: currentMode === 'Structural' ? structTypeSelect.value : matSelect.value,
         user: auth.currentUser.email
     };
 
-    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
-    document.getElementById('material-form').reset();
-    setMode(currentMode);
-    loadInventory(data.item);
-    submitBtn.innerText = "Add Entry"; submitBtn.disabled = false;
+    try {
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+        document.getElementById('material-form').reset();
+        setMode(currentMode); // Reset view labels
+        loadInventory(data.item);
+    } catch (err) {
+        alert("Error syncing to spreadsheet.");
+    } finally {
+        submitBtn.innerText = "Add Entry"; 
+        submitBtn.disabled = false;
+    }
 };
