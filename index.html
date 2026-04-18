@@ -18,77 +18,76 @@
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
                 Sign in with Google
             </button>
-            <div style="margin-top: 40px; font-size: 0.6rem; color: var(--text-muted); letter-spacing: 2px;">
-                AUTHORIZED PERSONNEL ONLY
-            </div>
         </div>
 
         <div id="inventory-ui" class="card" style="display:none;">
-            <div class="header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div class="header">
                 <div>
-                    <h2 id="user-greeting" style="font-size: 0.85rem; margin-bottom: 4px;">Welcome</h2>
+                    <h2 id="user-greeting">Welcome</h2>
                     <span class="status-badge">System Active</span>
                 </div>
                 <button id="logout-btn" class="btn-logout">Logout</button>
             </div>
             
             <div class="dashboard-layout">
-                <form id="material-form">
-                    <div class="input-group" style="margin-bottom: 25px;">
-                        <label>Inventory Mode</label>
-                        <div style="display: flex; gap: 2px;">
-                            <button type="button" id="mode-sheet" class="btn-mode active">Sheet</button>
-                            <button type="button" id="mode-tube" class="btn-mode">Structural</button>
+                <div class="entry-pane">
+                    <form id="material-form">
+                        <div class="input-group">
+                            <label>Inventory Mode</label>
+                            <div class="mode-toggle">
+                                <button type="button" id="mode-sheet" class="btn-mode active">Sheet</button>
+                                <button type="button" id="mode-tube" class="btn-mode">Structural</button>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="input-group">
-                        <label id="label-grade">Material Grade</label>
-                        <select id="mat-name" required></select>
-                    </div>
+                        <div class="input-group">
+                            <label id="label-grade">Material Grade</label>
+                            <select id="mat-name" required></select>
+                        </div>
 
-                    <div class="input-group" id="group-type" style="display:none;">
-                        <label id="label-sub-type">Material Type</label>
-                        <select id="struct-type"></select>
-                    </div>
+                        <div id="group-type" class="input-group" style="display:none;">
+                            <label id="label-sub-type">Material Type</label>
+                            <select id="struct-type"></select>
+                        </div>
 
-                    <div class="input-group">
-                        <label id="label-dim">Thickness</label>
-                        <input type="text" id="dim-input" placeholder="e.g. 0.250" required>
-                    </div>
+                        <div class="input-group">
+                            <label id="label-dim">Thickness</label>
+                            <input type="text" id="dim-input" placeholder="e.g. 0.250" required>
+                        </div>
 
-                    <div class="input-group">
-                        <label id="label-len">Size (W x L in Inches)</label>
-                        <input type="text" id="len-input" placeholder="e.g. 36 x 52" required>
-                    </div>
+                        <div class="input-group">
+                            <label id="label-len">Size (W x L)</label>
+                            <input type="text" id="len-input" placeholder="e.g. 48 x 96" required>
+                        </div>
 
-                    <div class="input-group">
-                        <label>Cert Number</label>
-                        <input type="text" id="cert-num" placeholder="C-XXXXX" required>
-                    </div>
+                        <div class="input-group">
+                            <label>Cert / Heat #</label>
+                            <input type="text" id="cert-num" placeholder="C-XXXXX" required>
+                        </div>
 
-                    <div class="input-group">
-                        <label>Location</label>
-                        <input type="text" id="location" placeholder="Rack B-2" required>
-                    </div>
+                        <div class="input-group">
+                            <label>Location</label>
+                            <input type="text" id="location" placeholder="Rack B-2" required>
+                        </div>
 
-                    <div class="input-group">
-                        <label>Notes (Optional)</label>
-                        <input type="text" id="other-info" placeholder="Additional details...">
-                    </div>
+                        <div class="input-group">
+                            <label>Notes</label>
+                            <input type="text" id="other-info" placeholder="Optional notes...">
+                        </div>
 
-                    <button type="submit" id="submit-btn" class="btn-submit">Add Entry</button>
-                </form>
+                        <button type="submit" id="submit-btn" class="btn-submit">Add Entry</button>
+                    </form>
+                </div>
 
                 <div id="stock-view">
-                    <h3 style="font-size: 0.85rem; margin-bottom: 15px; color: var(--brand-black); text-transform: uppercase; letter-spacing: 1px;">Live Stock View</h3>
+                    <h3 class="pane-title">Live Stock View</h3>
                     <div class="search-row">
                         <input type="text" id="search-1" placeholder="Filt. Dim">
                         <input type="text" id="search-2" placeholder="Filt. Size/Len">
                         <input type="text" id="search-3" placeholder="Filt. Material">
                     </div>
                     <div id="inventory-list" class="inventory-grid">
-                        <p class="footer-note">Select a category above to pull live data.</p>
+                        <p class="footer-note">Select a category above.</p>
                     </div>
                 </div>
             </div>
