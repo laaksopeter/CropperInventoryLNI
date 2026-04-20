@@ -132,7 +132,7 @@ matSelect.onchange = (e) => loadInventory(e.target.value);
 
 window.useSheet = async (id) => {
     if (!confirm(`Mark ${id} as used?`)) return;
-    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "DELETE", id, item: matSelect.value }) });
+    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "DELETE", id, item: matSelect.value, user: auth.currentUser.email }) });
     loadInventory(matSelect.value);
 };
 
